@@ -13,8 +13,11 @@ const BOOKINGS = [
 ]
 
 class App extends Component {
-  state = { bookings: BOOKINGS, searchValue: '' }
-  newBooking = '{"school": "Askim", "topics": "Matematik"}'
+  state = {
+    bookings: BOOKINGS,
+    searchValue: '',
+    newBooking: '{"school": "Askim", "topics": "Matematik"}'
+  }
 
   handleSearchInput = (evt) => {
     this.setState({
@@ -24,7 +27,8 @@ class App extends Component {
   }
 
   handleBookingChange = (evt) => {
-    this.newBooking = evt.target.value
+    this.setState({ newBooking: evt.target.value })
+
   }
 
   handleDeleteBooking = (evt) => {
@@ -37,7 +41,7 @@ class App extends Component {
   handleNewBooking = (evt) => {
     evt.preventDefault()
     this.setState({
-      bookings: addBooking(this.state.bookings, JSON.parse(this.newBooking))
+      bookings: addBooking(this.state.bookings, JSON.parse(this.state.newBooking))
     })
   }
 
@@ -62,7 +66,7 @@ class App extends Component {
             searchValue={this.state.searchValue} />
 
         <BookingForm
-            newBooking={this.newBooking}
+            newBooking={this.state.newBooking}
             handleNewBooking={this.handleNewBooking}
             handleBookingChange={this.handleBookingChange} />
 
