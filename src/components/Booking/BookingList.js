@@ -1,13 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { Table } from 'reactstrap'
 import { BookingItem } from './BookingItem'
 
 export const BookingList = (props) => (
   <section className="Booking-list">
-    { props.bookings.map(b => <BookingItem
-      handleDeleteBooking={props.handleDeleteBooking}
-      key={b.id} {...b} /> ) }
+    <h3>Bookings</h3>
+    <Table>
+      { props.bookings.map(b => <BookingItem
+        handleDeleteBooking={props.handleDeleteBooking}
+        key={b.id} {...b} /> ) }
+    </Table>
   </section>
 )
 
