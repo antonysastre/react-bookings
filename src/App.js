@@ -6,6 +6,7 @@ import { Container } from 'reactstrap'
 
 import './App.css';
 import { SearchForm, BookingList } from './components/Booking'
+import { Link } from './components/Router'
 import { findById, updateBooking, toggleBooking, deleteBooking, addBooking } from './lib/bookingHelpers'
 import { piper, binder } from './lib/utils'
 
@@ -39,11 +40,8 @@ class App extends Component {
     this.setState({ newBooking: evt.target.value })
   }
 
-  handleDeleteBooking = (evt) => {
-    evt.preventDefault()
-    this.setState({
-      bookings: deleteBooking(this.state.bookings, parseInt(evt.target.id, 10))
-    })
+  handleDeleteBooking = (id) => {
+    this.setState({ bookings: deleteBooking(this.state.bookings, id) })
   }
 
   handleNewBooking = (evt) => {
@@ -81,7 +79,14 @@ class App extends Component {
             handleNewBooking={this.handleNewBooking}
             handleToggleBooking={this.handleToggleBooking}
             handleBookingChange={this.handleBookingChange} />
+
+            <div class="footer">
+              <Link to="/all">All</Link>
+              <Link to="/appointed">Appointed</Link>
+              <Link to="/unappointed">Unappointed</Link>
+            </div>
         </Container>
+
       </div>
     );
   }
