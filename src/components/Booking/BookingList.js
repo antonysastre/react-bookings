@@ -1,17 +1,38 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Table } from 'reactstrap'
+import { Form, Table } from 'reactstrap'
 import { BookingItem } from './BookingItem'
+import { BookingForm } from './BookingForm'
 
 export const BookingList = (props) => (
   <section className="Booking-list">
-    <h3>Bookings</h3>
+    <Form inline onSubmit={props.handleNewBooking}>
     <Table>
-      { props.bookings.map(b => <BookingItem
-        handleDeleteBooking={props.handleDeleteBooking}
-        key={b.id} {...b} /> ) }
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>School</th>
+          <th>Topics</th>
+          <th>Appointed</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <BookingForm
+            newBooking={props.newBooking}
+            handleNewBooking={props.handleNewBooking}
+            handleBookingChange={props.handleBookingChange} />
+
+        { props.bookings.map(booking =>
+            <BookingItem
+              handleToggleBooking={props.handleToggleBooking}
+              handleDeleteBooking={props.handleDeleteBooking}
+              key={booking.id} {...booking} /> ) }
+      </tbody>
+
     </Table>
+    </Form>
   </section>
 )
 

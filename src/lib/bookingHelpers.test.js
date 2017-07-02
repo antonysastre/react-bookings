@@ -1,4 +1,4 @@
-import { addBooking, deleteBooking } from './bookingHelpers'
+import { findById, updateBooking, addBooking, toggleBooking, deleteBooking } from './bookingHelpers'
 
 test('addBooking should add the passed booking to the list', () => {
     const startBookings = [
@@ -48,5 +48,27 @@ test('deleteBooking removes the passed in booking id from the list', () => {
     const startBookings = [ { id: 1 }, { id: 2 } ]
     const expected = [ { id: 1 } ]
     const result = deleteBooking(startBookings, 2)
+    expect(result).toEqual(expected)
+})
+
+test('toggleBooking changes appointed state', () => {
+  const startBooking  = { id: 1, appointed: false }
+  const expected      = { id: 1, appointed: true }
+  expect(toggleBooking(startBooking)).toEqual(expected)
+})
+
+test('findById finds booking with given id', () => {
+    const startBookings = [ { id: 1 }, { id: 2 } ]
+    const expected = { id: 2 }
+    const result = findById(2, startBookings)
+    expect(result).toEqual(expected)
+})
+
+test('updateBooking returns a copy of a bookings list with the passed todo updated', () => {
+    const startBookings = [ { id: 1 }, { id: 2 }, { id: 3} ]
+    const updatedBooking = { id: 2, school: "Askim" }
+    const expected = [ { id: 1}, { id: 2, school: "Askim" }, { id:3 } ]
+
+    const result = updateBooking(startBookings, updatedBooking)
     expect(result).toEqual(expected)
 })

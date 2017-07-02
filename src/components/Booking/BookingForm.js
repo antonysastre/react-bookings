@@ -1,26 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Label, Button, Form, FormGroup, Input } from 'reactstrap'
+import { Button, Input } from 'reactstrap'
 
 export const BookingForm = (props) => (
-  <section className="Booking-form">
-    <h3>New booking</h3>
-    <Form onSubmit={props.handleNewBooking}>
-
-      <FormGroup>
-        <Label htmlFor="school">School</Label>
-        <Input type="string" name="school" />
-      </FormGroup>
-
-      <FormGroup>
-        <Label htmlFor="topics">Topics</Label>
-        <Input type="string" name="topics" />
-      </FormGroup>
-
-      <Button>Create Booking</Button>
-    </Form>
-  </section>
+  <tr>
+    <td>  </td>
+    <td> <Input type="string" name="school" placeholder="School" /> </td>
+    <td> <Input type="string" name="topics" placeholder="Topics" /> </td>
+    <td> <Input type="checkbox" name="appointed" />{' '} </td>
+    <td> <Button className="btn-link">Create</Button> </td>
+  </tr>
 )
 
 BookingForm.propTypes = {

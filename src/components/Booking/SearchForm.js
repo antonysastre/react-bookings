@@ -5,7 +5,6 @@ import { Form, Label, Input } from 'reactstrap'
 
 export const SearchForm = (props) => (
   <section className="Booking-actions">
-    <h3>Search Bookings</h3>
     <Form>
       <Label>Search</Label>
       <Input type="text" onChange={props.handleSearchInput} value={props.searchValue} />

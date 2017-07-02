@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
 
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
-
-import { SearchForm, BookingForm, BookingList } from './components/Booking'
-import { deleteBooking, addBooking } from './lib/bookingHelpers'
 import { Container } from 'reactstrap'
 
+import './App.css';
+import { SearchForm, BookingList } from './components/Booking'
+import { findById, updateBooking, toggleBooking, deleteBooking, addBooking } from './lib/bookingHelpers'
+import { piper, binder } from './lib/utils'
+
+
 const BOOKINGS = [
-  { id: 1, topics: "Matematik, Svenska", school: "Junior High", status: "Unappointed"},
-  { id: 2, topics: "Magic", school: "Hogwartz", status: "Appointed"}
+  { id: 1, topics: "Matematik, Svenska", school: "Junior High", appointed: false },
+  { id: 2, topics: "Magic", school: "Hogwartz", appointed: true }
 ]
 
 class App extends Component {
   state = {
     bookings: BOOKINGS,
     searchValue: '',
-    newBooking: '{"school": "Askim", "topics": "Matematik"}'
+    newBooking: ''
   }
 
   handleSearchInput = (evt) => {
@@ -25,6 +27,12 @@ class App extends Component {
       searchValue: evt.target.value,
       bookings: this.searchBookings(evt.target.value)
     })
+  }
+
+  handleToggleBooking = (id) => {
+    const getUpdatedBookings = piper(findById, toggleBooking, binder(updateBooking, this.state.bookings))
+    const updatedBookings    = getUpdatedBookings(id, this.state.bookings)
+    this.setState({ bookings: updatedBookings })
   }
 
   handleBookingChange = (evt) => {
@@ -41,7 +49,9 @@ class App extends Component {
   handleNewBooking = (evt) => {
     const newBooking = {
       school: evt.target.elements.school.value,
-      topics: evt.target.elements.topics.value }
+      topics: evt.target.elements.topics.value,
+      appointed: evt.target.elements.appointed.checked,
+    }
     evt.preventDefault()
     this.setState({
       bookings: addBooking(this.state.bookings, newBooking)
@@ -58,20 +68,19 @@ class App extends Component {
     return (
       <div className="App">
         <Container>
-          <header> <h2>Studentvikarie Bokningssystem</h2> </header>
+          <header> <h2>Bokningssystem</h2> </header>
           <hr/>
           <SearchForm
               handleSearchInput={this.handleSearchInput}
               searchValue={this.state.searchValue} />
 
-          <BookingForm
-              newBooking={this.state.newBooking}
-              handleNewBooking={this.handleNewBooking}
-              handleBookingChange={this.handleBookingChange} />
-
           <BookingList
             handleDeleteBooking={this.handleDeleteBooking}
-            bookings={this.state.bookings} />
+            bookings={this.state.bookings}
+            newBooking={this.state.newBooking}
+            handleNewBooking={this.handleNewBooking}
+            handleToggleBooking={this.handleToggleBooking}
+            handleBookingChange={this.handleBookingChange} />
         </Container>
       </div>
     );
