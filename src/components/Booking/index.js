@@ -1,3 +1,4 @@
 export { BookingList } from './BookingList'
+export { BookingFilter } from './BookingFilter'
 export { BookingForm } from './BookingForm'
-export { SearchForm } from './SearchForm'
+export { BookingSearch } from './BookingSearch'

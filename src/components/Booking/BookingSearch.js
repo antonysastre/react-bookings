@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Form, Label, Input } from 'reactstrap'
 
-export const SearchForm = (props) => (
+export const BookingSearch = (props) => (
   <section className="Booking-actions">
     <Form>
       <Label>Search</Label>
@@ -12,7 +12,7 @@ export const SearchForm = (props) => (
   </section>
 )
 
-SearchForm.propTypes = {
+BookingSearch.propTypes = {
   handleSearchInput: PropTypes.func.isRequired,
   searchValue: PropTypes.string,
 }

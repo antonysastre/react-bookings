@@ -1,4 +1,5 @@
 body { padding-top: 20px; }
 section { margin-bottom: 50px; }
 
-.footer a { padding-right: 10px; }
+.filter a { padding-right: 10px; }
+.filter { margin-bottom: 20px; }

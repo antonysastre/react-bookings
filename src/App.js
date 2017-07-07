@@ -6,15 +6,23 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Container } from 'reactstrap'
 
 import './App.css';
-import { SearchForm, BookingList } from './components/Booking'
-import { Link } from './components/Router'
+import { BookingSearch, BookingList, BookingFilter } from './components/Booking'
 import { findById,
   updateBooking,
   toggleBooking,
   deleteBooking,
   addBooking,
   searchBookings,
-  filterBookings } from './lib/bookingHelpers'
+  filterBookings
+} from './lib/bookingHelpers'
+
+import {
+  getBookings,
+  createBooking,
+  removeBooking,
+  saveBooking
+} from './lib/apiService'
+
 import { piper, binder } from './lib/utils'
 
 
@@ -22,7 +30,7 @@ class App extends Component {
   state = {
     bookings: [],
     searchValue: '',
-    newBooking: ''
+    newBooking: '',
   }
 
   handleSearchInput = (evt) => {
@@ -31,10 +39,17 @@ class App extends Component {
     })
   }
 
+  componentDidMount() {
+      getBookings().then(bookings => this.setState({bookings}))
+  }
+
   handleToggleBooking = (id) => {
-    const getUpdatedBookings = piper(findById, toggleBooking, binder(updateBooking, this.state.bookings))
-    const updatedBookings    = getUpdatedBookings(id, this.state.bookings)
+    const toggledBooking      = piper(findById, toggleBooking)
+    const updatedBooking     = toggledBooking(id, this.state.bookings)
+    const getUpdatedBookings = binder(updateBooking, this.state.bookings)
+    const updatedBookings    = getUpdatedBookings(updatedBooking)
     this.setState({ bookings: updatedBookings })
+    saveBooking(updatedBooking).then( this.displayMessage('Booking Updated') )
   }
 
   handleBookingChange = (evt) => {
@@ -42,7 +57,9 @@ class App extends Component {
   }
 
   handleDeleteBooking = (id) => {
-    this.setState({ bookings: deleteBooking(this.state.bookings, id) })
+    const booking = findById(id, this.state.bookings)
+    removeBooking(booking).then( this.displayMessage('Booking Removed') )
+    this.setState({ bookings: deleteBooking(this.state.bookings, booking.id) })
   }
 
   handleNewBooking = (evt) => {
@@ -55,8 +72,13 @@ class App extends Component {
     this.setState({
       bookings: addBooking(this.state.bookings, newBooking)
     })
+    createBooking(newBooking).then( this.displayMessage('Booking Added') )
   }
 
+  displayMessage(msg) {
+    this.setState({message: msg})
+    setTimeout(() => this.setState({message: ''}), 2000)
+  }
 
   render() {
     const searchedBookings = searchBookings(this.state.bookings, this.state.searchValue)
@@ -66,9 +88,13 @@ class App extends Component {
         <Container>
           <header> <h2>Bokningssystem</h2> </header>
           <hr/>
-          <SearchForm
+          <BookingSearch
               handleSearchInput={this.handleSearchInput}
               searchValue={this.state.searchValue} />
+
+          <BookingFilter />
+
+          {this.state.message && <span className="flash-notice">{this.state.message}</span>}
 
           <BookingList
             handleDeleteBooking={this.handleDeleteBooking}
@@ -77,12 +103,6 @@ class App extends Component {
             handleNewBooking={this.handleNewBooking}
             handleToggleBooking={this.handleToggleBooking}
             handleBookingChange={this.handleBookingChange} />
-
-            <div className="footer">
-              <Link to="/all">All</Link>
-              <Link to="/appointed">Appointed</Link>
-              <Link to="/unappointed">Unappointed</Link>
-            </div>
         </Container>
 
       </div>
