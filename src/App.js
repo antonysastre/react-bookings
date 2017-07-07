@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 // import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -7,18 +8,19 @@ import { Container } from 'reactstrap'
 import './App.css';
 import { SearchForm, BookingList } from './components/Booking'
 import { Link } from './components/Router'
-import { findById, updateBooking, toggleBooking, deleteBooking, addBooking } from './lib/bookingHelpers'
+import { findById,
+  updateBooking,
+  toggleBooking,
+  deleteBooking,
+  addBooking,
+  searchBookings,
+  filterBookings } from './lib/bookingHelpers'
 import { piper, binder } from './lib/utils'
 
 
-const BOOKINGS = [
-  { id: 1, topics: "Matematik, Svenska", school: "Junior High", appointed: false },
-  { id: 2, topics: "Magic", school: "Hogwartz", appointed: true }
-]
-
 class App extends Component {
   state = {
-    bookings: BOOKINGS,
+    bookings: [],
     searchValue: '',
     newBooking: ''
   }
@@ -26,7 +28,6 @@ class App extends Component {
   handleSearchInput = (evt) => {
     this.setState({
       searchValue: evt.target.value,
-      bookings: this.searchBookings(evt.target.value)
     })
   }
 
@@ -56,13 +57,10 @@ class App extends Component {
     })
   }
 
-  searchBookings(searchString) {
-    if (searchString === "") { return BOOKINGS; }
-    let searchPattern = new RegExp(searchString, "i");
-    return this.state.bookings.filter( b => ( b.school.match(searchPattern) ))
-  }
 
   render() {
+    const searchedBookings = searchBookings(this.state.bookings, this.state.searchValue)
+    const filteredBookings = filterBookings(searchedBookings, this.context.route)
     return (
       <div className="App">
         <Container>
@@ -74,7 +72,7 @@ class App extends Component {
 
           <BookingList
             handleDeleteBooking={this.handleDeleteBooking}
-            bookings={this.state.bookings}
+            bookings={filteredBookings}
             newBooking={this.state.newBooking}
             handleNewBooking={this.handleNewBooking}
             handleToggleBooking={this.handleToggleBooking}
@@ -90,6 +88,10 @@ class App extends Component {
       </div>
     );
   }
+}
+
+App.contextTypes = {
+  route: PropTypes.string
 }
 
 export default App;

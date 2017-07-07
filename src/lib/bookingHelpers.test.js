@@ -1,4 +1,4 @@
-import { findById, updateBooking, addBooking, toggleBooking, deleteBooking } from './bookingHelpers'
+import { findById, updateBooking, addBooking, toggleBooking, deleteBooking, filterBookings } from './bookingHelpers'
 
 test('addBooking should add the passed booking to the list', () => {
     const startBookings = [
@@ -71,4 +71,62 @@ test('updateBooking returns a copy of a bookings list with the passed todo updat
 
     const result = updateBooking(startBookings, updatedBooking)
     expect(result).toEqual(expected)
+})
+
+test('filterBookings /appoined returns appointed bookings', () => {
+  const startBookings = [
+    { id: 1, appointed: true },
+    { id: 2, appointed: false },
+    { id: 3, appointed: true },
+    { id: 4, appointed: false }
+  ]
+
+  const expected = [
+    { id: 1, appointed: true },
+    { id: 3, appointed: true }
+  ]
+
+  const result = filterBookings(startBookings, '/appointed')
+
+  expect(result).toEqual(expected)
+})
+
+test('filterBookings /unappoined returns unappointed bookings', () => {
+  const startBookings = [
+    { id: 1, appointed: true },
+    { id: 2, appointed: false },
+    { id: 3, appointed: true },
+    { id: 4, appointed: false }
+  ]
+
+  const expected = [
+    { id: 2, appointed: false },
+    { id: 4, appointed: false }
+  ]
+
+  const result = filterBookings(startBookings, '/unappointed')
+
+  expect(result).toEqual(expected)
+})
+
+test('filterBookings by default returns all bookings', () => {
+  const startBookings = [
+    { id: 1, appointed: true },
+    { id: 2, appointed: false },
+    { id: 3, appointed: true },
+    { id: 4, appointed: false }
+  ]
+
+  const expected = [
+    { id: 1, appointed: true },
+    { id: 2, appointed: false },
+    { id: 3, appointed: true },
+    { id: 4, appointed: false }
+  ]
+
+  const result_a = filterBookings(startBookings, '/')
+  expect(result_a).toEqual(expected)
+
+  const result_b = filterBookings(startBookings, '/xyz')
+  expect(result_b).toEqual(expected)
 })
