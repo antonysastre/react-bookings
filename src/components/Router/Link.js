@@ -1,18 +1,28 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Button } from 'reactstrap'
 
 export class Link extends Component {
+
   handleClick = (evt) => {
-      evt.preventDefault()
-      history.pushState(null, '', this.props.to) // eslint-disable-line
+    evt.preventDefault()
+    this.context.handleClick(this.props.to)
   }
 
   render() {
-    return ( <Button onClick={this.handleClick} className="btn-link">{this.props.children}</Button> )
+    const activeClass = this.context.route === this.props.to ? 'active' : ''
+    return ( <Button
+                onClick={this.handleClick}
+                className={activeClass + ' btn-link'}>{this.props.children}</Button> )
   }
 }
 
 Link.Proptypes = {
-    to: React.PropTypes.string.isRequired,
-    children: React.PropTypes.node
+  to: PropTypes.string.isRequired,
+  children: PropTypes.node
+}
+
+Link.contextTypes = {
+  handleClick: PropTypes.func,
+  route: PropTypes.string
 }

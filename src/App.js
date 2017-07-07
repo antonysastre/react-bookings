@@ -80,7 +80,7 @@ class App extends Component {
             handleToggleBooking={this.handleToggleBooking}
             handleBookingChange={this.handleBookingChange} />
 
-            <div class="footer">
+            <div className="footer">
               <Link to="/all">All</Link>
               <Link to="/appointed">Appointed</Link>
               <Link to="/unappointed">Unappointed</Link>
