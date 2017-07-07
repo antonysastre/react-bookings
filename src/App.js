@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 // import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.css';
-import { Container } from 'reactstrap'
+import { Alert, Container } from 'reactstrap'
 
 import './App.css';
 import { BookingSearch, BookingList, BookingFilter } from './components/Booking'
@@ -85,6 +85,9 @@ class App extends Component {
     const filteredBookings = filterBookings(searchedBookings, this.context.route)
     return (
       <div className="App">
+
+        {this.state.message && <Alert className="flash">{this.state.message}</Alert>}
+
         <Container>
           <header> <h2>Bokningssystem</h2> </header>
           <hr/>
@@ -93,8 +96,6 @@ class App extends Component {
               searchValue={this.state.searchValue} />
 
           <BookingFilter />
-
-          {this.state.message && <span className="flash-notice">{this.state.message}</span>}
 
           <BookingList
             handleDeleteBooking={this.handleDeleteBooking}
